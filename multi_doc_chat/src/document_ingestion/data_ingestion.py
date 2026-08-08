@@ -164,7 +164,7 @@ class FaissManager:
         ## if we running first time then it will not go in this block
 
         if self._exists():
-            self.vs = FAISS.laod_local(
+            self.vs = FAISS.load_local(
                 str(self.index_dir),
                 embeddings = self.emb,
                 allow_dangerous_deserialization  = True
@@ -175,7 +175,7 @@ class FaissManager:
         if not texts:
             raise DocumentPortalException("No existing FAISS index and no data to create one" , sys)
 
-        self.vs = FAISS.from_texts(texts= texts , embeddings = self.emb , metadatas = metadatas or [])
+        self.vs = FAISS.from_texts(texts= texts , embedding = self.emb , metadatas = metadatas or [])
         self.vs.save_local(str(self.index_dir))
         return self.vs
 
