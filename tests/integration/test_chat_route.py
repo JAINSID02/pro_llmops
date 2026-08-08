@@ -13,7 +13,7 @@ def test_chat_empty_message_return_400(client , clear_sessions , stub_rag):
     body = {"session_id":sid , "message":"  "}
     resp = client.post("/chat" , json=body)
     assert resp.status_code ==  400
-    assert "Message cannot be empty" in resp.json()["detail"]
+    assert "Message can not be empty" in resp.json()["detail"]
 
 def test_chat_success_returns_answer_and_appends_history(client , clear_sessions , stub_rag):
     sid = "sess_test"
@@ -46,4 +46,3 @@ def test_chat_failure_returns_500(client , clear_sessions , monkeypatch):
     assert resp.status_code == 500
     assert "fail load" in resp.json()["detail"].lower()
 
-    

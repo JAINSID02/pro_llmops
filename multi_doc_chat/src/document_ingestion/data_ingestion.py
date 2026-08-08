@@ -121,7 +121,7 @@ class FaissManager:
                 self._meta = {"rows":{}}
 
         self.model_loader = model_loader or ModelLoader()
-        self.emb = self.model_loader.load_embeddbings()
+        self.emb = self.model_loader.load_embeddings()
         self.vs :Optional[FAISS] = None
 
     def _exists (self) -> bool:
