@@ -21,7 +21,7 @@ def test_chat_ingestor_resolve_dir_use_session_dirs(tmp_dirs , stub_model_loader
     assert str(ing.temp_dir).endswith(ing.session_id)
     assert str(ing.faiss_dir).endswith(ing.session_id)
 
-def test_split_chunks_respect_size_and_overlap(temp_dirs , stub_model_loader):
+def test_split_chunks_respect_size_and_overlap(tmp_dirs , stub_model_loader):
     ing = ChatIngestor(temp_base = "data" , faiss_base = "faiss_index" , use_session_dirs = True)
     docs  = [Document(page_content = "A" * 1200 , metadata = {"source":"x.txt"})]
     chunks= ing._split(docs , chunk_size = 500 , chunk_overlap = 100)
@@ -30,7 +30,7 @@ def test_split_chunks_respect_size_and_overlap(temp_dirs , stub_model_loader):
     assert len(chunks[0].page_content) <= 500
 
 
-def test_faiss_manager_add_documents_idempotent(temp_dirs , stub_model_loader):
+def test_faiss_manager_add_documents_idempotent(tmp_dirs , stub_model_loader):
     fm = FaissManager(index_dir = pathlib.Path("faiss_index/test"))
     fm.load_or_create(texts = ["hello" , "world"] , metadatas= [{"source" : "a"} , {"source" : "b"}])
     docs = [Document(page_content = "hello" , metadata = {"source":"a"})]
@@ -40,4 +40,4 @@ def test_faiss_manager_add_documents_idempotent(temp_dirs , stub_model_loader):
     assert first >= 0
     assert third == 0 
 
-    
+

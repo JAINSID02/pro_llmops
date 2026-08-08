@@ -1,7 +1,7 @@
 import io
 import pytest
 
-def test_upload_success_returns_session_and_indexed(client , clear , clear_sessions , stub_ingestor , tmp_dirs):
+def test_upload_success_returns_session_and_indexed(client , clear_sessions , stub_ingestor , tmp_dirs):
     files = {"files" : ("note.txt" , io.BytesIO(b"hello world") , "text/plain")}
     resp = client.post("/upload" , files = files)
     assert resp.status_code == 200
@@ -27,7 +27,7 @@ def test_upload_ingestor_failure_returns_500(client , clear_sessions , monkeypat
             raise DocumentPortalException("boom" , None)
 
     monkeypatch.setattr(di  , "ChatIngestor" , Boom)
-    monkeypatch.setattr(main , "Chatingestor" , Boom)
+    monkeypatch.setattr(main , "ChatIngestor" , Boom)
 
     files = {"files" : ("note.txt" , io.BytesIO(b"hello world") , "text/plain")}    
     resp = client.post("/upload" , files = files)

@@ -144,7 +144,7 @@ def stub_rag(monkeypatch):
         def invoke(self  , user_input , chat_history = None):
             return "stubbed answer"
 
-    monkeypatch.setattr(r , "ConversationRAG" , FakeRAG)
+    monkeypatch.setattr(r , "ConversationalRAG" , FakeRAG)
     monkeypatch.setattr(main , "ConversationalRAG" , FakeRAG)
 
     yield FakeRAG
