@@ -5,15 +5,14 @@ from typing import Optional , cast
 class DocumentPortalException(Exception):
     def __init__(self , error_message , error_details : Optional[object] = None):
         # Normalize message
-        if isinstance(error_message , BaseException):
-            norm_msg = str(error_message)
+        norm_msg = str(error_message)
 
         # Resolve exc_info (supports: sys module, Exception object, or current context)
 
         exc_type = exc_value = exc_tb = None
 
         if error_details is None :
-            exc_type = exc_value = exc_tb = sys.exc_info()
+            exc_type , exc_value , exc_tb = sys.exc_info()
 
         else :
             if hasattr(error_details , "exc_info"):
