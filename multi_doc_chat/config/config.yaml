@@ -16,7 +16,7 @@ llm:
     model_name : "openai/gpt-oss-20b"
     temperature : 0
     max_output_tokens : 2048
-    
+#model update    
   google : 
     provider : "google"
     model_name : "gemini-2.5-flash"
