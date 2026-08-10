@@ -66,7 +66,7 @@ class ModelLoader:
 
         self.api_key_mgr = ApiKeyManager()
         self.config = load_config()
-        log.info("YAML config loaded" , config_keys = list(self.config_keys()))
+        log.info("YAML config loaded" , config_keys = list(self.config.keys()))
 
     def load_embeddings(self):
         """

@@ -77,10 +77,10 @@ class ChatIngestor:
             metas = [c.metadata for c in chunks]
 
             try : 
-                vs = fm.load_or_create(texts= texts , metadata = metas)
+                vs = fm.load_or_create(texts= texts , metadatas = metas)
 
             except Exception:
-                vs = fm.load_or_create(texts = texts , metadata = metas)
+                vs = fm.load_or_create(texts = texts , metadatas = metas)
 
             added = fm.add_documents(chunks)
             log.info("FAISS index updated" , added = added , index = str(self.faiss_dir))

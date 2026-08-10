@@ -6,7 +6,7 @@ from typing import Iterable , List
 from multi_doc_chat.logger.custom_logger import CustomLogger
 from multi_doc_chat.exceptions.custom_exception import DocumentPortalException
 
-SUPPORTED_EXTENSIONS = {".pdf" , ".docx" ".txt"  , ".pptx", ".md", ".csv", ".xlsx", ".xls", ".db", ".sqlite", ".sqlite3"}
+SUPPORTED_EXTENSIONS = {".pdf" , ".docx" , ".txt"  , ".pptx", ".md", ".csv", ".xlsx", ".xls", ".db", ".sqlite", ".sqlite3"}
 
 #Local logger instance
 log = CustomLogger().get_logger(__name__)

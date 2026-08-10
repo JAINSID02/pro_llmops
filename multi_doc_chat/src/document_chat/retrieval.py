@@ -181,7 +181,7 @@ class ConversationalRAG:
 
             # 2) Retrieve docs for rewritten question
 
-            retrieve_docs = question_rewriter | self.rewriter | self._format_docs
+            retrieve_docs = question_rewriter | self.retriever | self._format_docs
 
             # 3) Answer using retrieved context + original input + chat history
 
