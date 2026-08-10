@@ -63,11 +63,11 @@ jobs :
                 IMAGE_TAG : ${{ github.event.workflow_run.head_sha || github.sha }}
 
               run : |
-                IMAGE_URI = $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-                echo "IMAGE_URI = $IMAGE_URI" >> $GITHUB_ENV
+                IMAGE_URI=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+                echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
                 docker build -t $IMAGE_URI .
                 docker push $IMAGE_URI
-                echo "image=%IMAGE_URI" >> $GITHUB_OUTPUT
+                echo "image=$IMAGE_URI" >> $GITHUB_OUTPUT
 
     # -------------------------------
     # 2. Deploy to ECS
