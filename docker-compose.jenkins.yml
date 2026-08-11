@@ -1,13 +1,13 @@
 version : '3.8'
 
-service :
+services :
   jenkins :
     build:
       context : .
-      dockerfile.jenkins : Dockerfile.jenkins
+      dockerfile : Dockerfile.jenkins
     platform : linux/amd64
     container_name : jenkins-local
-    priviliged : true
+    privileged : true
     user : root
     ports : 
       - "8083:8080"
