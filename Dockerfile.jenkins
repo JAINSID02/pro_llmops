@@ -1,0 +1,54 @@
+FROM jenkins/jenkins:lts
+
+USER root
+
+#Install Python 3 and dependencies
+
+RUN apt-get update && \\
+    apt-get install -y \\
+    python3 \\
+    python3-pp \\
+    python-3 venv \\
+    git \\
+    curl \\
+    unzip \\
+    ca-certificates \\
+    lsb-releases \\
+    gnupg \\
+    sudo \\
+    && rm -rf /var/lib/apt/lists/*
+
+# Install AWS CLI v2
+RUN curl -sSL "<https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip>" -o "/tmp/awscliv2.zip" && \\
+    unzip -q /tmp/awscliv2.zip -d /tmp && \\
+    /tmp/aws/install && \\
+    rm -rf /tmp/aws /tmp/aws/awscliv2.zip
+
+# Install Docker CLI for building images in Jenkins
+
+RUN apt-get update && \\
+    apt-get install -y docker.io && \\
+    rm-rf /var/lib/apt/lists/*
+
+#Install kubect1
+
+RUN curl -LO "<https://dl.k8s.io/release/$>(curl -L -s <https://dl.k8s.io/release/stable.txt>)/bin/linux/amd64/kubectl" && \\
+    chmod +x kubect1 && \\
+    mv kubect1 /usr/local/bin/kubect1
+
+# Create symbolic link for python command
+RUN ln -s /usr/bin/python3 /usr/bin/python
+
+# Pre-install essential Jenkins plugins for this pipeline
+RUN jenkins-plugin-cli --plugins "git workflow-aggregator junit github-branch-source"
+
+# Configure git to allow all directories (fixes dubious ownership errors in Jenkins)
+RUN git config --system -add safe.directory '*'
+
+RUN groupadd -f docker && \\
+    usermod -aG docker,root jenkins && \\
+    echo "jenkins ALL=(ALL) NOPASSWD : ALL" >> /etc/sudoers
+
+# Don't switch user - run as root to access Docker socket
+# Jenkins will run as root but that's acceptable in a container environment
+USER root
