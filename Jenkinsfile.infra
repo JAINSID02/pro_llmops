@@ -69,13 +69,13 @@
                 echo 'Checking if stack already exists'
                 script{
                     def stackStatus = sh(
-                        script : """
+                        script : '''
                             aws cloudformation describe-stacks \
                                 --stack-name ${STACK_NAME} \
                                 --region ${AWS_REGION} \
                                 --query 'Stacks[0].StackStatus' \
                                 --output text 2>/dev/null || echo "NOT_FOUND"
-                        """,
+                        ''',
                         returnStdout : true    
                     ).trim()
 
@@ -84,7 +84,7 @@
                         env.STACK_ACTION = 'create'
                     } else if (stackStatus == 'ROLLBACK_COMPLETE'){
                         echo "Stack is in ROLLBACK_COMPLETE state , Deleting it first"
-                        sh """
+                        sh '''
                             aws cloudformation delete-stack \
                                 --stack-name ${STACK_NAME} \
                                 --region ${AWS_REGION}
@@ -94,7 +94,7 @@
                                 --stack-name ${STACK_NAME} \
                                 --region ${AWS_REGION}  
                             echo "Stack deleted  , Will Create new stack"
-                        """
+                        '''
                         env.STACK_ACTION = 'create'
                     } else {
                         echo " Stack exists with status : ${stackStatus} , Will Update it"
@@ -109,7 +109,7 @@
                 echo "${env.STACK_ACTION == 'create' ? 'Creating' : 'Updating'} Cloudformation Stack"
                 echo "This will take approx 20-30 minutes Plaease be Pateient"
                 script {
-                    sh """
+                    sh '''
                         set -e
 
                         #Deploy stack
@@ -128,7 +128,7 @@
                             --no-fail-on-empty-changeset
 
                         echo "CloudFormation Stack Deployed Successfully"
-                    """
+                    '''
 
                 }
             }
@@ -138,7 +138,7 @@
             steps{
                 echo 'Waiting for stack to reach  stable state'
                 script{
-                    sh """
+                    sh '''
                         set -e  
 
                         # Wait for stack to be ready    
@@ -147,7 +147,7 @@
                             --region ${AWS_REGION}
 
                         echo "Stack is now in stable state"
-                    """
+                    '''
                 }
             }
         }
@@ -156,7 +156,7 @@
             steps{
                 echo 'Verifying Infrastructure Components'
                 script{
-                    sh """
+                    sh '''
                         set -e
                         echo "======================================"
                         echo "Checking EKS Cluster..."
@@ -216,7 +216,7 @@
                         fi
 
                         echo "Infrastructure verification complete"
-                    """
+                    '''
                 }
             }
         }
@@ -225,7 +225,7 @@
             steps {
                 echo 'Retrieving stack outputs'
                 script {
-                    sh """
+                    sh '''
                         set -e
 
                         echo "======================================"
@@ -253,7 +253,7 @@
                         echo ""
                         echo "2. Run the deployment pipeline (Jenkinsfile.deploy)"
                         echo ""
-                    """
+                    '''
                 }
             }
         }
@@ -269,7 +269,7 @@
             echo 'Infrastructure provisioning failed'
             echo 'Check the console output above for above details'
             script{
-                sh """
+                sh '''
                     echo "======================================"
                     echo "❌ CREATE_FAILED Events:"
                     echo "======================================"
@@ -292,7 +292,7 @@
                         --query 'StackEvents[*].[Timestamp , ResourceStatus , LogicalResourceId , ResourceStatusReason]' \
                         --output table || true
 
-                """
+                '''
             }
         }
 
