@@ -308,13 +308,13 @@ Outputs :
 
   PublicSubnet1Id :
     Description : Public Subnet 1 ID
-    Value : !Ref PublicSubnet1Id
+    Value : !Ref PublicSubnet1
     Export :
       Name : !Sub '${AWS::StackName}-PublicSubnet1Id'
 
   PublicSubnet2Id :
     Description : Public Subnet 2 ID
-    Value : !Ref PublicSubnet2Id
+    Value : !Ref PublicSubnet2
     Export :
       Name : !Sub '${AWS::StackName}-PublicSubnet2Id'
 
