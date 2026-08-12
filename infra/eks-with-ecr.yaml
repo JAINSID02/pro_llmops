@@ -105,7 +105,7 @@ Resources :
           Value : !Sub "${ClusterName}-public-rt"
 
   PublicRoute:
-    Type : PublicRoute
+    Type : AWS::EC2::Route
     DependsOn: AttachGateway
     Properties : 
       RouteTableId : !Ref PublicRouteTable
@@ -128,7 +128,7 @@ Resources :
   # Security Group
   # ==========================================
   ClusterSecurityGroup:
-    Type : AWS::EC2:SecurityGroup
+    Type : AWS::EC2::SecurityGroup
     Properties:
       GroupDescription : Security Group For EKS Cluster
       VpcId : !Ref VPC
@@ -159,25 +159,26 @@ Resources :
   # IAM Roles
   # ==========================================
   EKSClusterRole:
-    Type : AWS::IAM:Role
-    Properties :  
-     AssumePolePolicyDocument:
-      Version : '2012-10-17'
-      Statement :
-        - Effect : Allow
-          Principal :
-            Service:
-              - eks.amazonaws.com
+    Type : AWS::IAM::Role
+    Properties :
 
-          Action :
-            - sts:AssumeRole
-    ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
-      - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
+      AssumeRolePolicyDocument:
+        Version : '2012-10-17'
+        Statement :
+          - Effect : Allow
+            Principal :
+              Service:
+                - eks.amazonaws.com
 
-    Tags:
-      - Key : Name
-        Value : !Sub '${ClusterName}-cluster-role'
+            Action :
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+        - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
+
+      Tags:
+        - Key : Name
+          Value : !Sub '${ClusterName}-cluster-role'
 
   NodeGroupRole :
     Type : AWS::IAM::Role
@@ -229,7 +230,7 @@ Resources :
     Properties:
       Name : !Ref ClusterName
       Version : '1.28'
-      RoleArn : !GetAtt EKSClusterRole.arn
+      RoleArn : !GetAtt EKSClusterRole.Arn
       ResourcesVpcConfig :
         SecurityGroupIds:
           - !Ref ClusterSecurityGroup
@@ -241,7 +242,7 @@ Resources :
         EndPointPrivateAccess : false
       Tags :
         - Key : Name
-        - Value : !Ref ClusterName
+          Value : !Ref ClusterName
   # ==========================================
   # EKS Node Group
   # ==========================================
