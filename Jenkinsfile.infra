@@ -138,7 +138,7 @@
             steps{
                 echo 'Waiting for stack to reach  stable state'
                 script{
-                    sh '''
+                    sh """
                         set -e  
 
                         # Wait for stack to be ready    
@@ -147,7 +147,7 @@
                             --region ${AWS_REGION}
 
                         echo "Stack is now in stable state"
-                    '''
+                    """
                 }
             }
         }
