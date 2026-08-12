@@ -118,12 +118,12 @@
                             --stack-name ${STACK_NAME} \
                             --region ${AWS_REGION} \
                             --parameter-overrides \
-                                ClusterName = ${CLUSTER_NAME} \
-                                NodeInstanceType = ${NODE_INSTANCE_TYPE} \ 
-                                DesiredCapacity = ${DESIRED_CAPACITY} \
-                                MinSize = ${MIN_SIZE} \
-                                MaxSize = ${MAX_SIZE} \
-                                ECRRepositoryName = ${ECR_REPOSITORY} \
+                                ClusterName=${CLUSTER_NAME} \
+                                NodeInstanceType=${NODE_INSTANCE_TYPE} \ 
+                                DesiredCapacity=${DESIRED_CAPACITY} \
+                                MinSize=${MIN_SIZE} \
+                                MaxSize=${MAX_SIZE} \
+                                ECRRepositoryName=${ECR_REPOSITORY} \
                             --capabilities CAPABILITY_IAM \
                             --no-fail-on-empty-changeset
 
