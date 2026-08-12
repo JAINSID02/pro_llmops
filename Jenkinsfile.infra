@@ -119,7 +119,7 @@
                             --region ${AWS_REGION} \
                             --parameter-overrides \
                                 ClusterName=${CLUSTER_NAME} \
-                                NodeInstanceType=${NODE_INSTANCE_TYPE} \ 
+                                NodeInstanceType=${NODE_INSTANCE_TYPE} \
                                 DesiredCapacity=${DESIRED_CAPACITY} \
                                 MinSize=${MIN_SIZE} \
                                 MaxSize=${MAX_SIZE} \
