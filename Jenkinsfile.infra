@@ -135,22 +135,30 @@
         }
 
         stage('Wait for Stack Completition'){
-            steps{
-                echo 'Waiting for stack to reach  stable state'
-                script{
-                    sh """
-                        set -e  
+    steps{
+        echo 'Waiting for stack to reach  stable state'
+        script{
+            def stableStatuses = ['CREATE_COMPLETE', 'UPDATE_COMPLETE']
+            def currentStatus = sh(
+                script: "aws cloudformation describe-stacks --stack-name ${STACK_NAME} --region ${AWS_REGION} --query 'Stacks[0].StackStatus' --output text",
+                returnStdout: true
+            ).trim()
 
-                        # Wait for stack to be ready    
-                        aws cloudformation wait stack-${env.STACK_ACTION == 'create' ? 'create' : 'update'}-complete\
-                            --stack-name ${STACK_NAME} \
-                            --region ${AWS_REGION}
-
-                        echo "Stack is now in stable state"
-                    """
-                }
+            if (stableStatuses.contains(currentStatus)) {
+                echo "Stack already stable at ${currentStatus} — no wait needed"
+            } else {
+                def action = (env.STACK_ACTION == 'create') ? 'create' : 'update'
+                sh """
+                    set -e
+                    aws cloudformation wait stack-${action}-complete \
+                        --stack-name ${STACK_NAME} \
+                        --region ${AWS_REGION}
+                    echo "Stack is now in stable state"
+                """
             }
         }
+    }
+}
 
         stage('Verify Infrastructure'){
             steps{
