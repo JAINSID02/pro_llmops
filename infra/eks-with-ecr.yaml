@@ -229,7 +229,7 @@ Resources :
 
     Properties:
       Name : !Ref ClusterName
-      Version : '1.28'
+      Version : '1.32'
       RoleArn : !GetAtt EKSClusterRole.Arn
       ResourcesVpcConfig :
         SecurityGroupIds:
@@ -238,8 +238,8 @@ Resources :
           - !Ref PublicSubnet1
           - !Ref PublicSubnet2
 
-        EndPointPublicAccess: true
-        EndPointPrivateAccess : false
+        EndpointPublicAccess: true
+        EndpointPrivateAccess : false
       Tags :
         - Key : Name
           Value : !Ref ClusterName
@@ -284,7 +284,7 @@ Outputs :
 
   ECRRepositoryURI:
     Description : ECR Repository URI
-    Value : !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazon.aws.com/${ECRRepositoryName}'
+    Value : !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRRepositoryName}'
     Export :
       Name : !Sub '${AWS::StackName}-ECRRepositoryURI'
 
