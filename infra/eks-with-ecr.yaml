@@ -9,7 +9,7 @@ Parameters:
 
   NodeInstanceType :
     Type : String
-    Default : t3.medium
+    Default : t3.small
     Description : EC2 instance type for worker nodes
     AllowedValues :
       - t3.small
