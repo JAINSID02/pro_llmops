@@ -89,7 +89,7 @@
                             echo 'kubectl is not installed'
                             exit 1
                         fi
-                        echo 'kubectl version : $(kubect1 version --client --short 2>/dev/null ||kubect1 version --client)'
+                        echo 'kubectl version : $(kubectl version --client --short 2>/dev/null ||kubectl version --client)'
 
                         #Check AWS Credentials
 
@@ -100,7 +100,7 @@
                         echo "AWS Credentials are set"
 
                         #Check ECR Registry
-                        if [ -z"${ECR_REISTRY}" ]; then
+                        if [ -z"${ECR_REGISTRY}" ]; then
                             echo " ECR Registry environment variable not set"
                             echo "set it to <account-id>.dkr.ecr.${AWS_REGION}.amazonaws.com"
                             exit 1
@@ -226,13 +226,13 @@
                             --platform linux/amd64 \
                             -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG} \
                             -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest \
-                            --load
+                            --load \
                             .
 
                         echo 'Docker image Built Succesfully'
 
                         #Show image details
-                        docker image ${ECR_REGISTRY}/${ECR_REPOSITORY}
+                        docker images ${ECR_REGISTRY}/${ECR_REPOSITORY}
                     '''
                 }
             }
@@ -251,7 +251,7 @@
 
                         #Push latest tag
                         echo 'Pushing : ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest'
-                        docker push ${ECR_REGISTRY}${ECR_REPOSITORY}:latest
+                        docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
 
                         echo 'Images pushed successfully'
                     '''
@@ -368,12 +368,12 @@
                             kubectl get pods -l app=multi-doc-chat-live
 
                             #Check for ImagePullBackOffPods
-                            FAILED_PODS=$(kubectl get pods -l  app=multi-doc-chat-live --field-selector=status.phase!=Running -o name 2>/dev>null || echo '')
+                            FAILED_PODS=$(kubectl get pods -l  app=multi-doc-chat-live --field-selector=status.phase!=Running -o name 2>/dev/null || echo '')
 
-                            if [-n "${FAILED_PODS}" ]; then
+                            if [ -n "${FAILED_PODS}" ]; then
                                 echo ''
                                 echo 'Found Failed Pods , describing one for diagnostics'
-                                FIRST_POD=$(echo "${FAILED_PODS}" | head=-1)
+                                FIRST_POD=$(echo "${FAILED_PODS}" | head -1)
                                 kubectl describe ${FIRST_POD} || true
 
                                 echo ""
@@ -461,7 +461,7 @@
                         kubectl apply -f k8/deployment.yaml
 
                         #Apply service
-                        kubectl apply -f k8/service.yml
+                        kubectl apply -f k8/service.yaml
 
                         echo 'Manifests applied successfully'
                     '''
@@ -480,10 +480,10 @@
                         
                         #Update deployment with new image tag
                         kubectl set image deployment/multi-doc-chat-live \
-                            multi-doc-chat-live=${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG} \
-                            --record
+                            multi-doc-chat-live=${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+                            
 
-                        Deployment image updated to ${IMAGE_TAG}
+                         echo 'Deployment image updated to ${IMAGE_TAG}'
 
                     '''
                 }
@@ -502,14 +502,14 @@
                         echo ''
 
                         #Monitor rollout with timeout
-                        TIMEOUT = 300
-                        ELAPSED = 0
-                        INTERVAL = 10
+                        TIMEOUT=300
+                        ELAPSED=0
+                        INTERVAL=10
 
                         while [ $ELAPSED -lt $TIMEOUT ] ; do
                             #Get Deployment Status
-                            READY = $(kubectl get deployment multi-doc-chat-live -o jsonpath='{.status.readyReplicas}' 2>/dev/null || echo "0" )
-                            DESIRED = $(kubectl get deployment multi-doc-chat-live -o jsonpath='{.spec.replicas}' 2>/dev/null || echo "0")
+                            READY=$(kubectl get deployment multi-doc-chat-live -o jsonpath='{.status.readyReplicas}' 2>/dev/null || echo "0" )
+                            DESIRED=$(kubectl get deployment multi-doc-chat-live -o jsonpath='{.spec.replicas}' 2>/dev/null || echo "0")
 
                             echo "Status : ${READY}/${DESIRED} replicas ready"
 
@@ -535,7 +535,7 @@
                             fi
 
                             #Check if Deployment is ready
-                            if [ "${READY}" = "${DESIRED}" ] && [ "${READY}" != "0" ]; then
+                            if [ "${READY}"="${DESIRED}" ] && [ "${READY}" != "0" ]; then
                                 echo ""
                                 echo "Rollout Completed Successfully"
                                 kubectl get pods -l app=multi-doc-chat-live -o wide
@@ -585,7 +585,7 @@
                         echo "Service:"
                         echo "======================================"
 
-                        kubectl get sv multi-doc-chat-service
+                        kubectl get svc multi-doc-chat-service
 
 
 
@@ -608,7 +608,7 @@
 
                         #Wait for upto 5 minutes for loadbalancer to get external IP
 
-                        for i in {1..30}: do
+                        for i in {1..30}; do
                             EXTERNAL_IP=$(kubectl get svc multi-doc-chat-service \
                                 -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || echo '')
 
@@ -653,10 +653,10 @@
 
                             #Try health check may take time for DNS to propagate
 
-                            for i in {1..10}: do
+                            for i in {1..10}; do
                                 if curl -f -s "http://${EXTERNAL_IP}/health" > /dev/null 2>&1 ; then
                                     echo 'Health Check Passed'
-                                    curl -s 'http://${EXTERNAL_IP}/health'
+                                    curl -s "http://${EXTERNAL_IP}/health"
                                     exit 0
                                 fi
 

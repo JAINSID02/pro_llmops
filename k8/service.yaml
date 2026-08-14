@@ -1,7 +1,7 @@
 apiVersion : v1
 kind : Service
 metadata : 
-  name : multi-doc-chat-Service
+  name : multi-doc-chat-service
   labels :
     app : multi-doc-chat-live
 spec :
@@ -16,4 +16,3 @@ spec :
     targetPort : 8080
     protocol : TCP
   sessionAffinity : None
-  
