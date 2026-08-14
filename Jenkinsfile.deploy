@@ -100,7 +100,7 @@
                         echo "AWS Credentials are set"
 
                         #Check ECR Registry
-                        if [ -z"${ECR_REGISTRY}" ]; then
+                        if [ -z "${ECR_REGISTRY}" ]; then
                             echo " ECR Registry environment variable not set"
                             echo "set it to <account-id>.dkr.ecr.${AWS_REGION}.amazonaws.com"
                             exit 1
