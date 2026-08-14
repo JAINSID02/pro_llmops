@@ -28,7 +28,7 @@
 
         //APPLICATION SECRETS
 
-        GROQ_API_KEY = "${env.GROQ_API_KEY ?: ' '}"
+        GROQ_API_KEY = "${env.GROQ_API_KEY ?: ''}"
         GOOGLE_API_KEY = "${env.GOOGLE_API_KEY ?: ''}"
 
         //BUILD CONFIGURATION
@@ -535,7 +535,7 @@
                             fi
 
                             #Check if Deployment is ready
-                            if [ "${READY}"="${DESIRED}" ] && [ "${READY}" != "0" ]; then
+                            if [ "${READY}" = "${DESIRED}" ] && [ "${READY}" != "0" ]; then
                                 echo ""
                                 echo "Rollout Completed Successfully"
                                 kubectl get pods -l app=multi-doc-chat-live -o wide
@@ -543,7 +543,7 @@
                             fi
 
                             sleep $INTERVAL
-                            ELAPSED = $((ELAPSED + INTERVAL))
+                            ELAPSED=$((ELAPSED + INTERVAL))
                         done
 
                         echo ""
