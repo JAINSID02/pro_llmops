@@ -612,7 +612,7 @@
                             EXTERNAL_IP=$(kubectl get svc multi-doc-chat-service \
                                 -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || echo '')
 
-                            if [ -n "${EXTERNAL_IP}" ]  && [ "${EXTERNAL_IP}" !=null ]; then
+                            if [ -n "${EXTERNAL_IP}" ]  && [ "${EXTERNAL_IP}" != null ]; then
                                 echo ""
                                 echo "======================================"
                                 echo "✅ Application is accessible at:"
